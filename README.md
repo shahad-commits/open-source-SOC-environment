@@ -1,31 +1,41 @@
-# SOC Orchestration — Shuffle Workflow Integration
-![Project logos](assets/logos/shuffle-logo.png)
+# SOC Automation Lab
 
-> Automated pipeline that ingests Wazuh alerts → extracts IOCs → enriches via MISP, TheHive/Cortex → performs Cortex analysis → triggers Wazuh active-response or TheHive case creation depending on severity — fully reproducible with Docker and Shuffle.
+## Introduction
+This project demonstrates a fully integrated Security Operations Center (SOC) environment with **automated threat detection, enrichment, and response**.  
+It integrates:
+- **Wazuh** (SIEM/EDR)
+- **Suricata** (IDS/IPS)
+- **MISP** (Threat Intelligence Sharing)
+- **TheHive & Cortex** (Incident Response & Analysis)
+- **Shuffle** (SOAR Automation)
+
+---
+
+## Architecture
+![Architecture](assets/architecture.png)
+
+## Workflow Flowchart
+![Workflow](assets/flowchart.png)
 
 ---
 
 ## Contents
-- [Architecture & Flowchart](#architecture--flowchart)
-- [Quickstart (dev)](#quickstart-dev)
-- [Component setup order](#component-setup-order)
-- [Shuffle workflow overview](#shuffle-workflow-overview)
-- [Security & secrets](#security--secrets)
-- [Troubleshooting & logs](#troubleshooting--logs)
-- [Contributing](#contributing)
-- [License](#license)
 
----
-
-## Architecture & Flowchart
-
-**Project architecture (high-level)**  
-![Architecture diagram](assets/diagrams/architecture-diagram.png)
-
-**Shuffle workflow flowchart**  
-![Shuffle flowchart](assets/diagrams/shuffle-workflow-flowchart.png)
-
-> Both diagrams are exports from draw.io. See `/assets/diagrams/` for the source `.drawio` or `.xml` if you want to edit them.
-
----
-
+<p align="center">
+  <a href="docs/wazuh.md">
+    <img src="assets/logos/wazuh.png" alt="Wazuh" height="60"/>
+  </a>
+  <a href="docs/misp.md">
+    <img src="assets/logos/misp.png" alt="MISP" height="60"/>
+  </a>
+  <a href="docs/suricata.md">
+    <img src="assets/logos/suricata.png" alt="Suricata" height="60"/>
+  </a>
+  <a href="docs/thehive-cortex.md">
+    <img src="assets/logos/thehive.png" alt="TheHive & Cortex" height="60"/>
+  </a>
+  <a href="docs/shuffle.md">
+    <img src="assets/logos/shuffle.png" alt="Shuffle" height="60"/>
+  </a>
+</p>
+ 
