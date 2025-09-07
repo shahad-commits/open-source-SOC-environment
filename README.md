@@ -19,10 +19,6 @@ It integrates:
 <img width="1024" height="768" alt="1" src="https://github.com/user-attachments/assets/1d7a4cc0-fbc4-4c9e-93be-996be5dd2ab3" />
 
 
-Wazuh
-Deployment
-
-Followed the Wazuh Docker Guide
 
 ---
 
@@ -55,7 +51,7 @@ Wazuh was deployed in **single-node mode**. After deployment, you can access the
 
 
 **Default login:** `admin:SecretPassword`  
-
+**DON'T FORGET TO CHANGE THE LOGIN DEFAULT CREDENTIALS**
 <img width="1720" height="860" alt="wazuh-ui" src="https://github.com/user-attachments/assets/1b1b7232-12bd-4b54-ae6c-7f8c842bb404" />
 
 
@@ -147,7 +143,8 @@ docker-compose up -d
 
 Access the MISP web interface at:
 https://<server-ip>:8443
-> **Note:** Default login: admin@admin.test:admin.
+> **Note:** Default login: `admin@admin.test:admin.`
+**DON'T FORGET TO CHANGE THE LOGIN DEFAULT CREDENTIALS**
 <img width="1593" height="797" alt="misp-ui" src="https://github.com/user-attachments/assets/c92c4bc2-2ea1-4eee-b460-a8da99d6730b" />
 
 
@@ -175,4 +172,70 @@ Important: Note the keys immediately after creation.... they are only visible on
 
 
 
+
+
+
+
+----
+
+# Cortex & TheHive Setup Guide
+
+## Deployment
+Cortex and TheHive were deployed using the **testing environment** deployment profile from StrangeBee:  
+🔗 [StrangeBee Docker Repository](https://github.com/StrangeBeeCorp/docker/tree/main/testing)
+
+- The **nginx port mapping** was changed to `7443:443` to avoid conflicts with Wazuh and MISP.
+- Access URLs:  
+  - Cortex → `https://<ip>:7443/cortex`  
+  - TheHive → `https://<ip>:7443/thehive`
+**DON'T FORGET TO CHANGE THE LOGIN DEFAULT CREDENTIALS**
+---
+
+## Cortex Setup
+1. On first access, you’ll be asked to **set the database** (configure the first user login credentials).
+   <img width="1724" height="862" alt="cortex-ui" src="https://github.com/user-attachments/assets/5facfe44-a6de-4545-acdf-503ffbcbb021" />
+
+   - After creating the initial username and password, log in to create:
+     - Your organization  
+     - An organization user with the proper permissions  
+      <img width="1920" height="547" alt="cortex-org" src="https://github.com/user-attachments/assets/1bbd6262-4340-4475-a3d7-1448a0baab7d" />
+
+3. **Analyzers & Responders**  
+   - These can only be configured **after logging in with your organization user account**.  
+   - Go to **Organization > Analyzers** and enable the desired analyzers.
+     <img width="1920" height="242" alt="analyzers-tab" src="https://github.com/user-attachments/assets/fe6098c9-8bf5-45f4-bffe-e7ce8f2bfecb" />
+ 
+   - Most analyzers require an **API key** (obtainable by signing up on the analyzer’s respective website).  
+   - Once enabled, analyzers will appear under the **Analyzers tab** (uppermost menu).  
+<img width="1920" height="696" alt="cortex analyzers" src="https://github.com/user-attachments/assets/598e6411-a902-45e7-b491-29676a0282aa" />
+
+4. **Save Org Admin API Key**  
+   - Note down the **OrgAdmin’s API key** for later use in **MISP** and **Shuffle integrations**.
+
+---
+
+## TheHive Setup
+1. Default login credentials:  
+   - **Email:** `admin@thehive.local`  
+   - **Password:** `secret`  
+
+2. After logging in, create your organizations.
+
+3. **Configure Connectors**  
+   - Go to: **Platform Management > Connectors**  
+   - Configure servers under the **Cortex** and **MISP** tabs.  
+   - Each requires the **URL** and **API key** of the service.  
+   - Use the **"Check connection"** button to test connectivity before enabling.  
+   - Successful integrations can be confirmed under the **License tab** (server stats visible).     <img width="1920" height="764" alt="thehice license tab" src="https://github.com/user-attachments/assets/030dd431-9af8-4a2b-acb4-63967cfe2bad" />
+ 
+
+4. **Save Organization API Key**  
+   - Now access you organization's user accound, go to **Account Settings > API Key** to generate/save your organization user’s API key.  
+   - This will be used for **Shuffle integration**.  
+
+5. You can press the **Cortex icon** in TheHive UI to view configured servers.
+<img width="1230" height="653" alt="servers-for-new-org-TH" src="https://github.com/user-attachments/assets/38865937-3a0f-4cce-957c-844de6750646" />
+
+
+---
 
