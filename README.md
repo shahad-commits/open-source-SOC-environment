@@ -1,4 +1,4 @@
-# 🛡️ SOC Automation Lab
+# SOC Automation Lab
 
 <div align="center">
 
@@ -6,59 +6,61 @@
 [![Automation](https://img.shields.io/badge/SOAR-Enabled-blue.svg)](https://github.com)
 [![Docker](https://img.shields.io/badge/Docker-Containerized-2496ED.svg)](https://github.com)
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](https://github.com)
+[![Status](https://img.shields.io/badge/Status-Production%20Ready-brightgreen.svg)](https://github.com)
+[![Lab](https://img.shields.io/badge/Environment-Lab-orange.svg)](https://github.com)
 
 </div>
 
 ---
 
-## 📋 Table of Contents
+## Table of Contents
 
-- [🎯 Introduction](#-introduction)
-- [🏗️ Architecture](#️-architecture)
-- [🔄 Workflow](#-workflow)
-- [📚 Component Documentation](#-component-documentation)
-- [🔧 Wazuh](#-wazuh)
+- [Introduction](#introduction)
+- [Architecture](#architecture)
+- [Workflow](#workflow)
+- [Component Documentation](#component-documentation)
+- [Wazuh](#wazuh)
   - [Deployment](#deployment)
   - [Agents Setup](#agents-setup)
   - [File Integrity Monitoring (FIM)](#file-integrity-monitoring-fim-integration)
   - [Active Response (AR)](#active-response-ar)
   - [Suricata Integration](#suricata-integration)
-- [🕵️ MISP](#️-misp)
+- [MISP](#misp)
   - [Deployment](#deployment-1)
   - [Organization & Feeds](#organization--feeds)
   - [API Keys](#api-keys)
-- [🛡️ Suricata](#️-suricata)
+- [Suricata](#suricata)
   - [Installation](#installation)
   - [Configuration](#configuration)
   - [MISP Integration](#misp-integration-ioc-detection-rules)
-- [🔬 Cortex & TheHive](#-cortex--thehive)
+- [Cortex & TheHive](#cortex--thehive)
   - [Deployment](#deployment-2)
   - [Cortex Setup](#cortex-setup)
   - [TheHive Setup](#thehive-setup)
-- [⚡ Shuffle Workflow](#-shuffle-workflow)
+- [Shuffle Workflow](#shuffle-workflow)
   - [Wazuh Webhook Integration](#wazuh-webhook-integration)
   - [Workflow Nodes](#workflow-nodes)
   - [Severity-based Branching](#severity-based-branching)
 
 ---
 
-## 🎯 Introduction
+## Introduction
 
-This project demonstrates a **fully integrated Security Operations Center (SOC)** environment with automated threat detection, enrichment, and response capabilities. The lab showcases enterprise-grade security tools working in harmony to provide comprehensive threat detection and incident response.
+This project demonstrates a **fully integrated Security Operations Center (SOC)** environment with automated threat detection, enrichment, and response capabilities.... The lab showcases enterprise-grade security tools working in harmony to provide comprehensive threat detection and incident response...
 
-### 🛠️ Integrated Technologies
+### Integrated Technologies
 
 | Component | Purpose | Role |
 |-----------|---------|------|
-| **🔍 Wazuh** | SIEM/EDR | Security monitoring and log analysis |
-| **🛡️ Suricata** | IDS/IPS | Network intrusion detection |
-| **🕵️ MISP** | Threat Intelligence | IOC sharing and enrichment |
-| **🔬 TheHive & Cortex** | SOAR Platform | Incident response and analysis |
-| **⚡ Shuffle** | Workflow Automation | Security orchestration |
+| **Wazuh** | SIEM/EDR | Security monitoring and log analysis.... |
+| **Suricata** | IDS/IPS | Network intrusion detection... |
+| **MISP** | Threat Intelligence | IOC sharing and enrichment... |
+| **TheHive & Cortex** | SOAR Platform | Incident response and analysis.... |
+| **Shuffle** | Workflow Automation | Security orchestration... |
 
 ---
 
-## 🏗️ Architecture
+## Architecture
 
 <div align="center">
 <img width="1024" height="768" alt="SOC Architecture Diagram" src="https://github.com/user-attachments/assets/49088473-f8fe-4806-94f2-59707a2d9f1a" />
@@ -66,7 +68,7 @@ This project demonstrates a **fully integrated Security Operations Center (SOC)*
 
 ---
 
-## 🔄 Workflow
+## Workflow
 
 <div align="center">
 <img width="1024" height="768" alt="Security Workflow Flowchart" src="https://github.com/user-attachments/assets/1d7a4cc0-fbc4-4c9e-93be-996be5dd2ab3" />
@@ -74,23 +76,23 @@ This project demonstrates a **fully integrated Security Operations Center (SOC)*
 
 ---
 
-## 📚 Component Documentation
+## Component Documentation
 
 <div align="center">
 <p>
-  <a href="#-wazuh">
+  <a href="#wazuh">
     <img src="assets/logos/wazuh.png" alt="Wazuh Documentation" height="60"/>
   </a>
-  <a href="#️-misp">
+  <a href="#misp">
     <img src="assets/logos/misp.png" alt="MISP Documentation" height="60"/>
   </a>
-  <a href="#️-suricata">
+  <a href="#suricata">
     <img src="assets/logos/suricata.png" alt="Suricata Documentation" height="60"/>
   </a>
-  <a href="#-cortex--thehive">
+  <a href="#cortex--thehive">
     <img src="assets/logos/thehive.png" alt="TheHive & Cortex Documentation" height="60"/>
   </a>
-  <a href="#-shuffle-workflow">
+  <a href="#shuffle-workflow">
     <img src="assets/logos/shuffle.png" alt="Shuffle Documentation" height="60"/>
   </a>
 </p>
@@ -98,17 +100,20 @@ This project demonstrates a **fully integrated Security Operations Center (SOC)*
 
 ---
 
-## 🔧 Wazuh
+## Wazuh
+
+[![SIEM](https://img.shields.io/badge/Type-SIEM%2FEDR-blue.svg)](https://wazuh.com)
+[![Docker](https://img.shields.io/badge/Deployment-Docker-2496ED.svg)](https://wazuh.com)
 
 ### Deployment
 
-The Wazuh deployment follows the official [Docker Deployment Guide](https://documentation.wazuh.com/current/deployment-options/docker/wazuh-container.html) using single-node mode for optimal performance in lab environments.
+The Wazuh deployment follows the official [Docker Deployment Guide](https://documentation.wazuh.com/current/deployment-options/docker/wazuh-container.html) using single-node mode for optimal performance in lab environments....
 
-**🌐 Access Information:**
+**Access Information:**
 - **URL:** `https://<server-ip-address>`
 - **Default Credentials:** `admin:SecretPassword`
 
-> ⚠️ **Security Notice:** Change default credentials immediately after deployment!
+> **Security Notice:** Change default credentials immediately after deployment....
 
 <div align="center">
 <img width="1720" height="860" alt="Wazuh Dashboard" src="https://github.com/user-attachments/assets/1b1b7232-12bd-4b54-ae6c-7f8c842bb404" />
@@ -119,23 +124,25 @@ The Wazuh deployment follows the official [Docker Deployment Guide](https://docu
 **Step-by-step Agent Configuration:**
 
 1. Navigate to **Agents Management → Summary → Deploy New Agents**
-2. Select your operating system and architecture (e.g., Debian amd64 for Ubuntu)
-3. Configure the agent's IP address
+2. Select your operating system and architecture (e.g., Debian amd64 for Ubuntu)....
+3. Configure the agent's IP address...
 
 <div align="center">
 <img width="1789" height="895" alt="Agent Deployment Interface" src="https://github.com/user-attachments/assets/9cdeb3b9-b565-4017-a5d6-0932521d5e70" />
 </div>
 
-4. Execute the provided CLI commands on your target system
-5. Verify agent registration in the **Agents Summary**
+4. Execute the provided CLI commands on your target system....
+5. Verify agent registration in the **Agents Summary**...
 
 <div align="center">
 <img width="1920" height="730" alt="Active Wazuh Agents" src="https://github.com/user-attachments/assets/976368ae-82a4-4008-97b7-a2792c4d80fd" />
 </div>
 
-📖 **Additional Resources:** [Comprehensive Agent Installation Guide](https://documentation.wazuh.com/current/installation-guide/wazuh-agent/index.html)
+**Additional Resources:** [Comprehensive Agent Installation Guide](https://documentation.wazuh.com/current/installation-guide/wazuh-agent/index.html)
 
 ### File Integrity Monitoring (FIM) Integration
+
+[![Monitoring](https://img.shields.io/badge/Feature-FIM-green.svg)](https://wazuh.com)
 
 **Configuration Steps:**
 
@@ -145,16 +152,16 @@ The Wazuh deployment follows the official [Docker Deployment Guide](https://docu
    ```
 
 2. **Locate and Configure FIM Block:**
-   - Review the `<fim>` section
-   - Add monitored directories with `realtime` parameter for instant detection
+   - Review the `<fim>` section....
+   - Add monitored directories with `realtime` parameter for instant detection...
 
 <div align="center">
 <img width="1881" height="940" alt="FIM Configuration Block" src="https://github.com/user-attachments/assets/ae97da47-374c-4c0b-9182-013ca280856b" />
 </div>
 
 3. **Monitor FIM Activity:**
-   - Navigate to **Endpoint Security → File Integrity Monitoring**
-   - Use **Explore Agent** for detailed dashboard, inventory, and event analysis
+   - Navigate to **Endpoint Security → File Integrity Monitoring**....
+   - Use **Explore Agent** for detailed dashboard, inventory, and event analysis...
 
 <div align="center">
 <img width="1739" height="869" alt="FIM Monitoring Dashboard" src="https://github.com/user-attachments/assets/c0a10c56-91a3-4ba4-99bf-8bf3c2ec718a" />
@@ -162,7 +169,9 @@ The Wazuh deployment follows the official [Docker Deployment Guide](https://docu
 
 ### Active Response (AR)
 
-This lab demonstrates Wazuh's Active Response using the `firewall-drop` command for automated threat mitigation.
+[![Response](https://img.shields.io/badge/Feature-Active%20Response-red.svg)](https://wazuh.com)
+
+This lab demonstrates Wazuh's Active Response using the `firewall-drop` command for automated threat mitigation....
 
 <div align="center">
 <img width="1920" height="601" alt="Firewall Drop Command Configuration" src="https://github.com/user-attachments/assets/b48f86cd-f04e-4fc9-b5b5-7a06733b29ef" />
@@ -170,18 +179,20 @@ This lab demonstrates Wazuh's Active Response using the `firewall-drop` command 
 
 **Configuration Process:**
 
-1. **Edit ossec.conf** and locate `<active-response>` section
-2. **Add firewall-drop block** to enable automated blocking
+1. **Edit ossec.conf** and locate `<active-response>` section...
+2. **Add firewall-drop block** to enable automated blocking....
 
 <div align="center">
 <img width="1920" height="246" alt="Active Response Configuration" src="https://github.com/user-attachments/assets/5dfd977e-a47a-4789-8c63-461675db98e8" />
 </div>
 
-📚 **Reference:** [Complete Active Response Documentation](https://documentation.wazuh.com/current/user-manual/capabilities/active-response/index.html)
+**Reference:** [Complete Active Response Documentation](https://documentation.wazuh.com/current/user-manual/capabilities/active-response/index.html)
 
 ### Suricata Integration
 
-> 📍 **Prerequisites:** Complete Suricata deployment and note log directory path (typically `/var/log/suricata`)
+[![Integration](https://img.shields.io/badge/Integration-Suricata-orange.svg)](https://suricata.io)
+
+> **Prerequisites:** Complete Suricata deployment and note log directory path (typically `/var/log/suricata`)....
 
 **Integration Configuration:**
 
@@ -204,15 +215,18 @@ Access Suricata logs through **Explore → Discover** to confirm integration:
 
 ---
 
-## 🕵️ MISP
+## MISP
+
+[![TIP](https://img.shields.io/badge/Type-Threat%20Intelligence-purple.svg)](https://misp-project.org)
+[![Docker](https://img.shields.io/badge/Deployment-Docker-2496ED.svg)](https://misp-project.org)
 
 ### Deployment
 
-MISP deployment utilizes the official [MISP Docker Repository](https://github.com/MISP/misp-docker) for containerized threat intelligence platform.
+MISP deployment utilizes the official [MISP Docker Repository](https://github.com/MISP/misp-docker) for containerized threat intelligence platform....
 
 **Pre-deployment Configuration:**
-- Modify port mapping in `docker-compose.yml` to avoid conflicts
-- Update `misp-core` service port configuration
+- Modify port mapping in `docker-compose.yml` to avoid conflicts....
+- Update `misp-core` service port configuration...
 
 <div align="center">
 <img width="1670" height="835" alt="MISP Core Configuration" src="https://github.com/user-attachments/assets/5d4da18b-14ff-4615-8c84-97ba9115a3f0" />
@@ -223,11 +237,11 @@ MISP deployment utilizes the official [MISP Docker Repository](https://github.co
 docker-compose up -d
 ```
 
-**🌐 Access Information:**
+**Access Information:**
 - **URL:** `https://<server-ip>:8443`
 - **Default Credentials:** `admin@admin.test:admin`
 
-> ⚠️ **Security Notice:** Update default credentials immediately!
+> **Security Notice:** Update default credentials immediately....
 
 <div align="center">
 <img width="1593" height="797" alt="MISP Web Interface" src="https://github.com/user-attachments/assets/c92c4bc2-2ea1-4eee-b460-a8da99d6730b" />
@@ -235,10 +249,12 @@ docker-compose up -d
 
 ### Organization & Feeds
 
+[![Feeds](https://img.shields.io/badge/Feature-Threat%20Feeds-yellow.svg)](https://misp-project.org)
+
 **Initial Setup:**
-1. **Create Organization** - Establish your security organization profile
-2. **Configure Feeds** - Navigate to **Sync Actions → Feeds**
-3. **Enable Threat Feeds** - Use **Load Default Feed Metadata** and activate desired feeds
+1. **Create Organization** - Establish your security organization profile....
+2. **Configure Feeds** - Navigate to **Sync Actions → Feeds**...
+3. **Enable Threat Feeds** - Use **Load Default Feed Metadata** and activate desired feeds....
 
 <div align="center">
 <img width="1712" height="856" alt="Enabled Threat Intelligence Feeds" src="https://github.com/user-attachments/assets/e818ab92-9779-4d7a-b731-bb0b6287df39" />
@@ -253,16 +269,21 @@ All threat intelligence events are accessible via the **Home** tab:
 
 ### API Keys
 
+[![API](https://img.shields.io/badge/Feature-API%20Integration-lightblue.svg)](https://misp-project.org)
+
 **Integration Requirements:**
 Generate API keys for external integrations (Suricata, TheHive):
 
-1. Navigate to **Admin → Auth Keys**
-2. Generate integration-specific keys
-3. **⚠️ Important:** Document keys immediately - they're only visible once
+1. Navigate to **Admin → Auth Keys**....
+2. Generate integration-specific keys...
+3. **Important:** Document keys immediately - they're only visible once....
 
 ---
 
-## 🛡️ Suricata
+## Suricata
+
+[![IDS](https://img.shields.io/badge/Type-IDS%2FIPS-darkgreen.svg)](https://suricata.io)
+[![Network](https://img.shields.io/badge/Layer-Network-blue.svg)](https://suricata.io)
 
 ### Installation
 
@@ -276,6 +297,8 @@ sudo apt-get install suricata
 ```
 
 ### Configuration
+
+[![Config](https://img.shields.io/badge/Step-Configuration-orange.svg)](https://suricata.io)
 
 **Network Interface Setup:**
 
@@ -301,7 +324,9 @@ sudo apt-get install suricata
 
 ### MISP Integration (IOC Detection Rules)
 
-Suricata integrates with MISP to leverage threat intelligence for proactive IOC detection.
+[![IOC](https://img.shields.io/badge/Feature-IOC%20Detection-red.svg)](https://suricata.io)
+
+Suricata integrates with MISP to leverage threat intelligence for proactive IOC detection....
 
 **Rule Export Options:**
 MISP provides multiple export formats accessible via **Home → Export**:
@@ -319,10 +344,10 @@ curl -k -H "Authorization: <MISP_API_KEY>" \
 ```
 
 **Rule Processing Challenges:**
-Many MISP rules require preprocessing for Suricata compatibility. A custom Python sanitization script was developed to address format inconsistencies:
+Many MISP rules require preprocessing for Suricata compatibility.... A custom Python sanitization script was developed to address format inconsistencies:
 
-- **Input:** `misp.rules` (raw MISP export)
-- **Output:** `misp_clean.rules` (Suricata-compatible format)
+- **Input:** `misp.rules` (raw MISP export)....
+- **Output:** `misp_clean.rules` (Suricata-compatible format)...
 
 <div align="center">
 <img width="1842" height="221" alt="Rule Loading Process" src="https://github.com/user-attachments/assets/dd431f3f-5cd9-491a-922c-1c60e684142f" />
@@ -361,24 +386,29 @@ Suricata alerts are automatically ingested by Wazuh:
 
 ---
 
-## 🔬 Cortex & TheHive
+## Cortex & TheHive
+
+[![SOAR](https://img.shields.io/badge/Type-SOAR%20Platform-indigo.svg)](https://thehive-project.org)
+[![Incident](https://img.shields.io/badge/Purpose-Incident%20Response-red.svg)](https://thehive-project.org)
 
 ### Deployment
 
-Deployment utilizes StrangeBee's testing environment profile for rapid lab setup.
+Deployment utilizes StrangeBee's testing environment profile for rapid lab setup....
 
-**📦 Repository:** [StrangeBee Docker Testing Environment](https://github.com/StrangeBeeCorp/docker/tree/main/testing)
+**Repository:** [StrangeBee Docker Testing Environment](https://github.com/StrangeBeeCorp/docker/tree/main/testing)
 
 **Configuration Changes:**
-- **Nginx Port Mapping:** Modified to `7443:443` to prevent conflicts
+- **Nginx Port Mapping:** Modified to `7443:443` to prevent conflicts...
 
-**🌐 Access URLs:**
+**Access URLs:**
 - **Cortex:** `https://<ip>:7443/cortex`
 - **TheHive:** `https://<ip>:7443/thehive`
 
-> ⚠️ **Security Notice:** Change default credentials immediately after deployment!
+> **Security Notice:** Change default credentials immediately after deployment....
 
 ### Cortex Setup
+
+[![Analyzers](https://img.shields.io/badge/Feature-Analyzers-green.svg)](https://cortexneurons.org)
 
 **Initial Configuration:**
 
@@ -389,8 +419,8 @@ Deployment utilizes StrangeBee's testing environment profile for rapid lab setup
    </div>
 
 2. **Organization Management:**
-   - Create your security organization
-   - Configure organization users with appropriate permissions
+   - Create your security organization....
+   - Configure organization users with appropriate permissions...
    
    <div align="center">
    <img width="1920" height="547" alt="Cortex Organization Setup" src="https://github.com/user-attachments/assets/1bbd6262-4340-4475-a3d7-1448a0baab7d" />
@@ -398,26 +428,28 @@ Deployment utilizes StrangeBee's testing environment profile for rapid lab setup
 
 3. **Analyzers & Responders Configuration:**
    
-   > 📋 **Note:** Available only after organization user login
+   > **Note:** Available only after organization user login....
    
-   - Navigate to **Organization → Analyzers**
-   - Enable required analyzers for threat analysis
+   - Navigate to **Organization → Analyzers**...
+   - Enable required analyzers for threat analysis....
    
    <div align="center">
    <img width="1920" height="242" alt="Analyzer Configuration Tab" src="https://github.com/user-attachments/assets/fe6098c9-8bf5-45f4-bffe-e7ce8f2bfecb" />
    </div>
    
-   - **API Key Requirements:** Most analyzers require service-specific API keys
-   - **Verification:** Enabled analyzers appear in the main Analyzers tab
+   - **API Key Requirements:** Most analyzers require service-specific API keys....
+   - **Verification:** Enabled analyzers appear in the main Analyzers tab...
    
    <div align="center">
    <img width="1920" height="696" alt="Active Cortex Analyzers" src="https://github.com/user-attachments/assets/598e6411-a902-45e7-b491-29676a0282aa" />
    </div>
 
 4. **API Key Management:**
-   - Document **OrgAdmin API key** for MISP and Shuffle integrations
+   - Document **OrgAdmin API key** for MISP and Shuffle integrations....
 
 ### TheHive Setup
+
+[![Cases](https://img.shields.io/badge/Feature-Case%20Management-blue.svg)](https://thehive-project.org)
 
 **Initial Access:**
 - **Email:** `admin@thehive.local`
@@ -425,27 +457,27 @@ Deployment utilizes StrangeBee's testing environment profile for rapid lab setup
 
 **Configuration Steps:**
 
-1. **Organization Setup** - Create your incident response organizations
+1. **Organization Setup** - Create your incident response organizations....
 
 2. **Connector Configuration:**
-   - Navigate to **Platform Management → Connectors**
-   - Configure **Cortex** and **MISP** server connections
-   - Provide URLs and API keys for each service
-   - Use **"Check connection"** to validate integrations
+   - Navigate to **Platform Management → Connectors**...
+   - Configure **Cortex** and **MISP** server connections....
+   - Provide URLs and API keys for each service...
+   - Use **"Check connection"** to validate integrations....
    
 3. **Integration Verification:**
-   - Successful connections visible under **License** tab with server statistics
+   - Successful connections visible under **License** tab with server statistics...
    
    <div align="center">
    <img width="1920" height="764" alt="TheHive License and Integration Status" src="https://github.com/user-attachments/assets/030dd431-9af8-4a2b-acb4-63967cfe2bad" />
    </div>
 
 4. **API Key Generation:**
-   - Access **Account Settings → API Key**
-   - Generate and document organization user API key for Shuffle integration
+   - Access **Account Settings → API Key**....
+   - Generate and document organization user API key for Shuffle integration...
 
 5. **Server Status Monitoring:**
-   - Click the **Cortex icon** to view configured servers
+   - Click the **Cortex icon** to view configured servers....
    
    <div align="center">
    <img width="1230" height="653" alt="Configured Cortex Servers" src="https://github.com/user-attachments/assets/38865937-3a0f-4cce-957c-844de6750646" />
@@ -453,17 +485,22 @@ Deployment utilizes StrangeBee's testing environment profile for rapid lab setup
 
 ---
 
-## ⚡ Shuffle Workflow
+## Shuffle Workflow
 
-The implemented automation workflow follows the logic illustrated in the project flowchart, providing end-to-end security orchestration.
+[![Orchestration](https://img.shields.io/badge/Type-Security%20Orchestration-purple.svg)](https://shuffler.io)
+[![Automation](https://img.shields.io/badge/Feature-Automation-brightgreen.svg)](https://shuffler.io)
+
+The implemented automation workflow follows the logic illustrated in the project flowchart, providing end-to-end security orchestration....
 
 ### Wazuh Webhook Integration
 
-**Webhook Configuration:**
-- Workflow initiates via webhook URL integrated into Wazuh's `ossec.conf`
-- **Challenge:** Self-signed certificate authorization failures
+[![Webhook](https://img.shields.io/badge/Trigger-Webhook-orange.svg)](https://shuffler.io)
 
-**🔧 Certificate Trust Resolution:**
+**Webhook Configuration:**
+- Workflow initiates via webhook URL integrated into Wazuh's `ossec.conf`....
+- **Challenge:** Self-signed certificate authorization failures...
+
+**Certificate Trust Resolution:**
 
 1. **Export Shuffle Certificate:**
    ```bash
@@ -498,12 +535,14 @@ The implemented automation workflow follows the logic illustrated in the project
      | sed -n '/Verify return code/,$p'   # Should return: "Verify return code: 0 (ok)..."
    ```
 
-**✅ Result:** Wazuh alerts successfully flow to Shuffle workflow
+**Result:** Wazuh alerts successfully flow to Shuffle workflow....
 
 ### Workflow Nodes
 
+[![Parsing](https://img.shields.io/badge/Step-IOC%20Parsing-yellow.svg)](https://shuffler.io)
+
 **1. Webhook → Parse IOCs Node**
-- Successfully extracts IPs and file hashes from security events
+- Successfully extracts IPs and file hashes from security events....
 
 <div align="center">
 <img width="1501" height="863" alt="IOC Parsing Workflow" src="https://github.com/user-attachments/assets/b26ffbe1-340a-4a80-beb3-73a726795a59" />
@@ -511,9 +550,11 @@ The implemented automation workflow follows the logic illustrated in the project
 
 **2. TheHive Alert Creation → Conditional Observable Addition**
 
+[![Observables](https://img.shields.io/badge/Feature-Observables-lightgreen.svg)](https://shuffler.io)
+
 **Branch Conditions:**
-- **Hash Detection:** Logs containing `syscheck` (FIM events)
-- **IP Detection:** Logs containing `journald` (system events)
+- **Hash Detection:** Logs containing `syscheck` (FIM events)...
+- **IP Detection:** Logs containing `journald` (system events)....
 
 **FIM Alert with Linked Observables:**
 <div align="center">
@@ -532,6 +573,8 @@ The implemented automation workflow follows the logic illustrated in the project
 
 **3. Cortex Analysis Chain:**
 
+[![Analysis](https://img.shields.io/badge/Stage-Analysis-blue.svg)](https://shuffler.io)
+
 **Get Available Analyzers:**
 <div align="center">
 <img width="1511" height="894" alt="Available Analyzers Query" src="https://github.com/user-attachments/assets/784c65c6-07ea-4cb5-9764-fbbcb1459bb9" />
@@ -543,8 +586,8 @@ The implemented automation workflow follows the logic illustrated in the project
 </div>
 
 **4. Maliciousness Filter Node:**
-- **Non-malicious IOCs:** Workflow terminates
-- **Malicious IOCs:** Workflow continues to response phase
+- **Non-malicious IOCs:** Workflow terminates....
+- **Malicious IOCs:** Workflow continues to response phase...
 
 **5. Alert Enrichment:**
 Updates TheHive alerts with analyzer intelligence:
@@ -560,9 +603,13 @@ Updates TheHive alerts with analyzer intelligence:
 
 ### Severity-based Branching
 
+[![Response](https://img.shields.io/badge/Stage-Automated%20Response-red.svg)](https://shuffler.io)
+
 **Automated Response Logic:**
 
-**🔥 Low-Medium Severity (< 6): Wazuh Active Response**
+**Low-Medium Severity (< 6): Wazuh Active Response**
+
+[![Low Severity](https://img.shields.io/badge/Severity-Low%2FMedium-yellow.svg)](https://shuffler.io)
 
 1. **API Token Acquisition:**
    <div align="center">
@@ -574,7 +621,9 @@ Updates TheHive alerts with analyzer intelligence:
    <img width="1507" height="882" alt="Automated Active Response" src="https://github.com/user-attachments/assets/ead4265c-93bf-4456-9c4b-78156936d65a" />
    </div>
 
-**🚨 High Severity (≥ 6): Case Creation & Analyst Review**
+**High Severity (≥ 6): Case Creation & Analyst Review**
+
+[![High Severity](https://img.shields.io/badge/Severity-High%2FCritical-red.svg)](https://shuffler.io)
 
 1. **TheHive Case Creation:**
    <div align="center">
@@ -604,22 +653,27 @@ Updates TheHive alerts with analyzer intelligence:
 
 <div align="center">
 
-## 🎉 Lab Complete!
+## Lab Complete
+
+[![Complete](https://img.shields.io/badge/Status-Complete-brightgreen.svg)](https://github.com)
+[![Functional](https://img.shields.io/badge/State-Fully%20Functional-success.svg)](https://github.com)
 
 **This SOC Automation Lab demonstrates enterprise-grade security orchestration with:**
-- ✅ Automated threat detection and analysis
-- ✅ Intelligence-driven response workflows  
-- ✅ Seamless tool integration and data flow
-- ✅ Severity-based incident escalation
-- ✅ Complete audit trail and case management
+- Automated threat detection and analysis....
+- Intelligence-driven response workflows...  
+- Seamless tool integration and data flow....
+- Severity-based incident escalation...
+- Complete audit trail and case management....
 
 ---
 
-**📝 Next Steps:**
-- Customize detection rules for your environment
-- Implement additional analyzer modules
-- Enhance workflow automation logic
-- Scale deployment for production use
+[![Next](https://img.shields.io/badge/Phase-Next%20Steps-blue.svg)](https://github.com)
+
+**Next Steps:**
+- Customize detection rules for your environment....
+- Implement additional analyzer modules...
+- Enhance workflow automation logic....
+- Scale deployment for production use...
 
 </div>
   
