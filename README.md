@@ -189,10 +189,10 @@ sudo apt-get install suricata
 <img width="1156" height="85" alt="ip-add" src="https://github.com/user-attachments/assets/7f949461-d544-49e7-948e-af69d7398453" />
 
 -Then edit the main Suricata configuration file (/etc/suricata/suricata.yaml) with your preferred editor to: 
-1- Update the monitored interface under af-packet.
+  1- Update the monitored interface under af-packet.
 <img width="796" height="50" alt="af-packet-int" src="https://github.com/user-attachments/assets/cc72c362-ceee-4b7e-a0a5-6a64dc785c8b" />
 
-2- Set your home network for accurate alerting.
+  2- Set your home network for accurate alerting.
 <img width="1673" height="136" alt="home-net" src="https://github.com/user-attachments/assets/6302333a-5bfc-4bed-8d70-73d0a62c7a04" />
 
 
@@ -299,3 +299,114 @@ Cortex and TheHive were deployed using the **testing environment** deployment pr
 
 ---
 
+# Shuffle Workflow
+
+The implemented **Shuffle workflow logic** is illustrated in the flowchart at the beginning of this README.
+
+## Wazuh Webhook Integration
+
+- The workflow starts with a **webhook**, whose URL is copied into an **integration block** in Wazuh's `ossec.conf`.
+- **Self-signed certificate issue**: Wazuh manager initially refuses the webhook due to authorization failure.  
+  - Adding `verify=False` in `shuffle.py` was insufficient.  
+  - Solution:
+    1. Export Shuffle server certificate to a PEM file on the host:
+
+    ```bash
+    openssl s_client -connect "$SHUFFLE_ADDR" -showcerts </dev/null 2>/dev/null \
+      | openssl x509 -outform PEM > shuffle-ca.crt
+    ```
+
+    2. Quick sanity check:
+
+    ```bash
+    head -n 2 shuffle-ca.crt   # should show: -----BEGIN CERTIFICATE-----
+    ```
+
+    3. Copy PEM into Wazuh manager container’s trust anchors:
+
+    ```bash
+    docker cp shuffle-ca.crt "$MANAGER":/etc/pki/ca-trust/source/anchors/shuffle-ca.crt
+    ```
+
+    4. Ensure CA tools are installed:
+
+    ```bash
+    docker exec "$MANAGER" sh -c 'command -v yum >/dev/null && yum -y install ca-certificates || true'
+    ```
+
+    5. Rebuild the system CA bundle:
+
+    ```bash
+    docker exec "$MANAGER" update-ca-trust extract
+    ```
+
+    6. Verify the Shuffle cert is trusted:
+
+    ```bash
+    docker exec "$MANAGER" \
+      openssl s_client -connect "$SHUFFLE_ADDR" -CAfile /etc/ssl/certs/ca-bundle.crt </dev/null \
+      | sed -n '/Verify return code/,$p'   # should show "Verify return code: 0 (ok)..."
+    ```
+
+- After this, **Wazuh alerts flow successfully** to Shuffle.
+
+---
+
+## Workflow Nodes
+
+1. **Webhook Node** → connected to **Parse IOCs Node**
+   - Correctly parses IPs and hashes.
+     <img width="1501" height="863" alt="ip-wf-1" src="https://github.com/user-attachments/assets/b26ffbe1-340a-4a80-beb3-73a726795a59" />
+
+2. **TheHive Alert Creation Node** → branches conditionally:
+   - **Add Observables Nodes** branch conditions:
+     - For hashes → logs must include `syscheck`
+     - For IPs → logs must include `journald`
+   - Alerts are created and observables are linked accordingly.
+    here's a FIM alert with the parsed IOCs linked as observables:
+    <img width="1405" height="338" alt="ip-wf-2-1" src="https://github.com/user-attachments/assets/5311bb9a-d7a5-48ac-93c9-a16cf60ca5dd" />
+   <img width="1490" height="621" alt="hash-alert" src="https://github.com/user-attachments/assets/1389deb9-8273-43f6-8873-317988e89926" />
+ <img width="1173" height="608" alt="hash-observables" src="https://github.com/user-attachments/assets/c0ad37a5-8fa8-414f-8c68-96a1f5fb9613" />
+
+3. **Cortex Nodes** (consecutive):
+   1. **Get Available Analyzers** → references datatype and data from Parse IOCs node.
+   3. **Run Analyzers** → uses previous node output as analyzer names (list access via `.#`).
+    <img width="1511" height="894" alt="ip-wf-3" src="https://github.com/user-attachments/assets/784c65c6-07ea-4cb5-9764-fbbcb1459bb9" />
+    
+   5. **Get Analyzer Results** → references previous node output (`.#`) again.
+    <img width="1495" height="875" alt="ip-wf-4" src="https://github.com/user-attachments/assets/07b7bb12-fbbd-4143-a633-05b08e16e117" />
+
+4. **Filter Node**:
+   - Checks if both analyzer results flag the IOC as malicious.
+   - Non-malicious → workflow terminates.
+   - Malicious → workflow continues.
+5. **Update Alert Node**
+   -Uses the analyzers report results to update the created alert
+   <img width="1496" height="845" alt="ip-wf-5" src="https://github.com/user-attachments/assets/9388aa75-be72-4511-8cac-16312cd279fa" />
+   the update alerts with the analyzers' tags:
+   <img width="1920" height="843" alt="ip-wf-5-1" src="https://github.com/user-attachments/assets/37e7ed65-64ef-4644-b409-e6d05632930e" />
+
+---
+
+## Severity-based Branching
+
+- **If IOC is malicious**, branch based on alert severity:
+  1. **Severity < 6 (Wazuh Active-Response)**:
+     - Get Wazuh API token.
+       <img width="1502" height="891" alt="wazuh-api-token" src="https://github.com/user-attachments/assets/a7d5a453-933e-401e-ba4b-183bbfd68c67" />
+     - Activate active-response using PUT command.
+      <img width="1507" height="882" alt="wazuh-ar" src="https://github.com/user-attachments/assets/ead4265c-93bf-4456-9c4b-78156936d65a" />
+
+  2. **Severity ≥ 6**:
+     - Create TheHive case from alert.
+       <img width="1492" height="878" alt="high-severity-case-creation" src="https://github.com/user-attachments/assets/31e43471-a047-43c1-8032-5e5e0a85aafb" />
+      the created cases in TheHive show with the linked alert:
+      <img width="1920" height="849" alt="linked-alerts" src="https://github.com/user-attachments/assets/6e52b675-2a01-49a5-a69c-74bb523d4a45" />
+      <img width="1920" height="827" alt="linked-alert-detail" src="https://github.com/user-attachments/assets/0ec09b85-0493-44da-9494-b94ae03f2852" />
+     -Get case Artifacts
+    <img width="1507" height="893" alt="getartifacts" src="https://github.com/user-attachments/assets/b6078a1c-9a62-478f-aceb-4aa283eeb673" />
+
+     - Run in-app analyzers for detailed analyst review. The full aler can be parsed in TheHIve case:
+       <img width="1920" height="856" alt="in-app-analyzers" src="https://github.com/user-attachments/assets/6238d485-b613-4300-b95b-b27375707c3e" />
+
+     
