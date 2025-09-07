@@ -170,11 +170,71 @@ Generate new keys for each integration.
 
 Important: Note the keys immediately after creation.... they are only visible once.
 
+----
+# Suricata Setup & Integration
+
+## Installation
+
+Install Suricata on Ubuntu using the official stable PPA:
+
+```bash
+sudo apt-get install software-properties-common
+sudo add-apt-repository ppa:oisf/suricata-stable
+sudo apt-get update
+sudo apt-get install suricata
+```
+## Configuration
+
+-Check your WAN IP with: $ip addr 
+<img width="1156" height="85" alt="ip-add" src="https://github.com/user-attachments/assets/7f949461-d544-49e7-948e-af69d7398453" />
+
+-Then edit the main Suricata configuration file (/etc/suricata/suricata.yaml) with your preferred editor to: 
+1- Update the monitored interface under af-packet.
+<img width="796" height="50" alt="af-packet-int" src="https://github.com/user-attachments/assets/cc72c362-ceee-4b7e-a0a5-6a64dc785c8b" />
+
+2- Set your home network for accurate alerting.
+<img width="1673" height="136" alt="home-net" src="https://github.com/user-attachments/assets/6302333a-5bfc-4bed-8d70-73d0a62c7a04" />
 
 
+## MISP Integration (IOC Detection Rules)
 
+In this workflow, Suricata acts as an IDS integrated with MISP to detect IOCs.
+MISP provides rule files compatible with IDS/IPS platforms like Snort and Suricata.. the rules can be accessed via API or, for testing purposes, by downloading the rule file from Misp, you can go to home -> export to see the available options
+<img width="1920" height="772" alt="misp-nids" src="https://github.com/user-attachments/assets/89fdba6b-8f63-486a-b189-47043a5e63c3" />
 
+### Importing Rules
 
+Download rules from MISP and save them in Suricata’s rules directory:
+```BASH
+curl -k -H "Authorization: <MISP_API_KEY>" \
+     -H "Accept: application/json" \
+     <MISP_IP>/attributes/text/download/suricata \
+     -o /var/lib/suricata/rules/<filename>
+```
+### Rule Parsing Issues
+
+Many rules from MISP fail to parse in Suricata due to format inconsistencies...
+A custom Python script was written to clean and validate the rules:
+-Input: misp.rules (via curl)
+-Output: misp_clean.rules
+Multiple iterations were required to ensure all rules passed parsing (as you can see from the script filename, v6, we really went through it...)
+<img width="1842" height="221" alt="role-loading" src="https://github.com/user-attachments/assets/dd431f3f-5cd9-491a-922c-1c60e684142f" />
+viewing the first few lines of the sanitized rules to see that they're in the appropriate syntax for suricata: <img width="1920" height="981" alt="Screenshot (648)" src="https://github.com/user-attachments/assets/63fe58d4-82fa-4760-b9cf-91450b8a5a3f" />
+
+The sources for suricata rules can be cheked by 
+```bash 
+suricata-update list-enabled-sources
+```
+We can see misp is listed as a source after the successful synchronization:
+<img width="1395" height="161" alt="Screenshot (642)" src="https://github.com/user-attachments/assets/949fd451-6333-4e74-96b4-0be474544dda" />
+
+### Testing Detection
+
+After loading the cleaned rules, test detection by triggering a MISP rule and then tailing Suricata logs alerts in /var/log/suricata/fast.log.
+<img width="1920" height="606" alt="misp-log" src="https://github.com/user-attachments/assets/9509c861-d59d-4de4-860d-94138242bf22" />
+
+Alerts are also visible in Wazuh after the Suricata-Wazuh integration (see Wazuh section for details)...
+<img width="1509" height="793" alt="misp-log-in-wazuh" src="https://github.com/user-attachments/assets/a081e29d-0357-47b3-ad35-12d27ac2f100" />
 
 ----
 
