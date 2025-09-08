@@ -644,7 +644,14 @@ Updates TheHive alerts with analyzer intelligence:
    <img width="1507" height="893" alt="Case Artifact Retrieval" src="https://github.com/user-attachments/assets/b6078a1c-9a62-478f-aceb-4aa283eeb673" />
    </div>
 
-4. **In-App Analyzer Execution:**
+4. **In-App Analyzer Automated Execution:**
+    The Analayzers resport will be available in Thehive case for speedy analyst review...
+   <div align="center">
+   <img width="1493" height="888" alt="Screenshot (586)" src="https://github.com/user-attachments/assets/0a8d5ae8-7275-4acf-8e9b-efa4e1be2d60" />
+    <div/>
+     <div align="center">
+   <img width="1920" height="769" alt="Screenshot (589)" src="https://github.com/user-attachments/assets/3dda74f9-6b59-47ec-8026-1fe681934b42" />
+    <div/>
    <div align="center">
    <img width="1920" height="856" alt="In-App Security Analysis" src="https://github.com/user-attachments/assets/6238d485-b613-4300-b95b-b27375707c3e" />
    </div>
