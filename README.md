@@ -232,7 +232,7 @@ MISP deployment utilizes the official [MISP Docker Repository](https://github.co
 <img width="1670" height="835" alt="MISP Core Configuration" src="https://github.com/user-attachments/assets/5d4da18b-14ff-4615-8c84-97ba9115a3f0" />
 </div>
 
-**Deployment Command:**
+**Then safely run:**
 ```bash
 docker-compose up -d
 ```
@@ -344,7 +344,7 @@ curl -k -H "Authorization: <MISP_API_KEY>" \
 ```
 
 **Rule Processing Challenges:**
-Many MISP rules require preprocessing for Suricata compatibility.... A custom Python sanitization script was developed to address format inconsistencies:
+Many MISP rules require preprocessing for Suricata compatibility.... The only method that worked was to build a custom Python sanitization script to address format inconsistencies (as you can see we were into our 6th version.. it was rough):
 
 - **Input:** `misp.rules` (raw MISP export)....
 - **Output:** `misp_clean.rules` (Suricata-compatible format)...
@@ -412,14 +412,14 @@ Deployment utilizes StrangeBee's testing environment profile for rapid lab setup
 
 **Initial Configuration:**
 
-1. **Database Setup** - Configure first-time user credentials:
+1. **Database Setup** - Upon first access you will be required to set the initial login credentials, then you can access the UI:
    
    <div align="center">
    <img width="1724" height="862" alt="Cortex Initial Setup" src="https://github.com/user-attachments/assets/5facfe44-a6de-4545-acdf-503ffbcbb021" />
    </div>
 
 2. **Organization Management:**
-   - Create your security organization....
+   - Create your security organization..
    - Configure organization users with appropriate permissions...
    
    <div align="center">
@@ -428,7 +428,7 @@ Deployment utilizes StrangeBee's testing environment profile for rapid lab setup
 
 3. **Analyzers & Responders Configuration:**
    
-   > **Note:** Available only after organization user login....
+   > **Note:** You can only configure aanalyzers in your created Organization by accessing through the Orf admin account..
    
    - Navigate to **Organization → Analyzers**...
    - Enable required analyzers for threat analysis....
@@ -498,7 +498,11 @@ The implemented automation workflow follows the logic illustrated in the project
 
 **Webhook Configuration:**
 - Workflow initiates via webhook URL integrated into Wazuh's `ossec.conf`....
-- **Challenge:** Self-signed certificate authorization failures...
+- To avoid Self-signed certificate authorization failures, go to the Wazuh Manager's container and access `/var/ossec/integrations/shuffle.py`, Edit the `send_msg` function to disable verification:
+  ```bash
+    res = requests.post(url, data=msg, headers=headers, timeout=10, verify=False
+``
+  -However in my case that was not enough to avoid Auth failures, and Ihad to export Shuffle's cert to one of Wazuh trust anchors, as illustrated in the following step.
 
 **Certificate Trust Resolution:**
 
@@ -535,7 +539,6 @@ The implemented automation workflow follows the logic illustrated in the project
      | sed -n '/Verify return code/,$p'   # Should return: "Verify return code: 0 (ok)..."
    ```
 
-**Result:** Wazuh alerts successfully flow to Shuffle workflow....
 
 ### Workflow Nodes
 
@@ -575,12 +578,12 @@ The implemented automation workflow follows the logic illustrated in the project
 
 [![Analysis](https://img.shields.io/badge/Stage-Analysis-blue.svg)](https://shuffler.io)
 
-**Get Available Analyzers:**
+**Get Available Analyzers& Run them:**
 <div align="center">
 <img width="1511" height="894" alt="Available Analyzers Query" src="https://github.com/user-attachments/assets/784c65c6-07ea-4cb5-9764-fbbcb1459bb9" />
 </div>
 
-**Execute Analyzers:**
+**Get Analyzers Result:**
 <div align="center">
 <img width="1495" height="875" alt="Analyzer Execution Results" src="https://github.com/user-attachments/assets/07b7bb12-fbbd-4143-a633-05b08e16e117" />
 </div>
@@ -612,24 +615,55 @@ Updates TheHive alerts with analyzer intelligence:
 [![Low Severity](https://img.shields.io/badge/Severity-Low%2FMedium-yellow.svg)](https://shuffler.io)
 
 1. **API Token Acquisition:**
+   The API credentials for your Wazuh Dahboard can be found in the docker-compose.yml file, defined as API_USERNAME and API_PASSWORD. Use them to get the API token required to trigger AR with the command:
+   ```bash
+   curl -u API_USERNAME:API_PASSWORD -k \
+   -X POST https://<HOST_IP>:55000/security/user/authenticate 
+  `` 
    <div align="center">
    <img width="1502" height="891" alt="Wazuh API Token Request" src="https://github.com/user-attachments/assets/a7d5a453-933e-401e-ba4b-183bbfd68c67" />
    </div>
 
-2. **Active Response Execution:**
+3. **Active Response Execution:**
+    After obtaining the token we can use it as our Auth key in the PUT request to trigger AR:
+   ```bash
+   curl -k -X PUT "https://<wazuh-server-ip>:55000/active-response" \
+   -H "Authorization: Bearer <token>" \ # HERE WE REFERENCE THE TOKEN IN THE PREVIOUS NODE OUTPUT, FOR INSTANCE  IF MY HTTP NODE WAS CALLED HTTP_1, THEN THE TOKEN CAN BE REFRENCED BY: $HTTP_1.token
+   -H "Content-Type: application/json" \
+   d '{
+      "command": "firewall-drop",
+      "arguments": ["<source-ip>"], # THE SOURCE IP IN THE WAZUH ALERT
+      "alert": {
+          "data": {
+              "srcip": "<source-ip>" # AGAIN, THE SOURCE IP THAT GENERATED THE ALERT
+          }
+      }
+    }'
+`
    <div align="center">
    <img width="1507" height="882" alt="Automated Active Response" src="https://github.com/user-attachments/assets/ead4265c-93bf-4456-9c4b-78156936d65a" />
    </div>
 
-**High Severity (≥ 6): Case Creation & Analyst Review**
+> **NOTE:** The Ar command should be appended by the value of the timeout in the AR block you
+> configured in ossec.conf. For instance, if the timeout was set to 600, then the command in
+> the PUT request should be: firewall-drop600. If you configured no timeout value, the command
+> should be appended by a 0, so: firewall-drop0. If the command wasn't referenced correctly
+> you'll hit an error with the code: 1652 and message: The command used is not defined in the configuration.
 
+**High Severity (≥ 6): Case Creation & Analyst Review**
 [![High Severity](https://img.shields.io/badge/Severity-High%2FCritical-red.svg)](https://shuffler.io)
 
 1. **TheHive Case Creation:**
    <div align="center">
    <img width="1492" height="878" alt="High Severity Case Creation" src="https://github.com/user-attachments/assets/31e43471-a047-43c1-8032-5e5e0a85aafb" />
    </div>
-
+   
+   -We can see the created cases with the `Linked Alert` and `Observables` fields populated:
+  
+  <div align="center">
+  <img width="1920" height="807" alt="created-cases" src="https://github.com/user-attachments/assets/efe106dd-2e94-4e31-b323-35224e50dcb2" />
+  </div>
+  
 2. **Linked Alert Management:**
    <div align="center">
    <img width="1920" height="849" alt="Cases with Linked Alerts" src="https://github.com/user-attachments/assets/6e52b675-2a01-49a5-a69c-74bb523d4a45" />
